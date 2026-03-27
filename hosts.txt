@@ -1,0 +1,31 @@
+sudo nano /etc/apache2/sites-available/meusite.conf
+
+<VirtualHost *:80>
+    ServerName meusite.test
+    ServerAlias www.meusite.test
+    DocumentRoot /var/www/html/seu-projeto
+
+    <Directory /var/www/html/seu-projeto>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+# Ativa o seu site
+sudo a2ensite meusite.conf
+
+# Ativa o módulo de reescrita de URL (útil para links limpos)
+sudo a2enmod rewrite
+
+# Reinicia o Apache para aplicar
+sudo systemctl restart apache2
+
+sudo nano /etc/hosts
+127.0.0.1   meusite.test
+
+sudo chown -R www-data:www-data /var/www/html/seu-projeto
+sudo chmod -R 755 /var/www/html/seu-projeto
