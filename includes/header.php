@@ -1,6 +1,11 @@
 <?php
 // includes/header.php
+require_once __DIR__ . '/auth.php';
+requireLogin();
+
 $pagina_atual = basename($_SERVER['PHP_SELF'], '.php');
+$_papel       = getPapel();
+$_email       = getEmail();
 $titulos = [
     'index'          => 'Início',
     'form_usuario'   => 'Novo Utilizador',
@@ -272,8 +277,10 @@ $titulo = $titulos[$pagina_atual] ?? 'Barbearia';
     </a>
   </div>
 
+  <?php if (hasRole('admin', 'barbeiro')): ?>
   <div class="nav-group">
     <span class="nav-label">Cadastros</span>
+    <?php if (hasRole('admin')): ?>
     <a href="form_cliente.php"  class="nav-link <?= $pagina_atual==='form_cliente'?'active':'' ?>">
       <span class="icon">👤</span> Clientes
     </a>
@@ -286,8 +293,11 @@ $titulo = $titulos[$pagina_atual] ?? 'Barbearia';
     <a href="form_usuario.php"  class="nav-link <?= $pagina_atual==='form_usuario'?'active':'' ?>">
       <span class="icon">🔑</span> Utilizadores
     </a>
+    <?php endif; ?>
   </div>
+  <?php endif; ?>
 
+  <?php if (hasRole('admin', 'barbeiro')): ?>
   <div class="nav-group">
     <span class="nav-label">Agenda</span>
     <a href="form_disponibilidade.php" class="nav-link <?= $pagina_atual==='form_disponibilidade'?'active':'' ?>">
@@ -297,6 +307,7 @@ $titulo = $titulos[$pagina_atual] ?? 'Barbearia';
       <span class="icon">🚫</span> Bloqueios
     </a>
   </div>
+  <?php endif; ?>
 
   <div class="nav-group">
     <span class="nav-label">Operações</span>
@@ -306,8 +317,22 @@ $titulo = $titulos[$pagina_atual] ?? 'Barbearia';
     <a href="form_avaliacao.php"   class="nav-link <?= $pagina_atual==='form_avaliacao'?'active':'' ?>">
       <span class="icon">⭐</span> Avaliações
     </a>
+    <?php if (hasRole('admin', 'barbeiro')): ?>
     <a href="form_notificacao.php" class="nav-link <?= $pagina_atual==='form_notificacao'?'active':'' ?>">
       <span class="icon">🔔</span> Notificações
+    </a>
+    <?php endif; ?>
+  </div>
+
+  <div style="margin-top:auto;padding:16px 12px 0;border-top:1px solid var(--border);margin-left:12px;margin-right:12px;">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">
+      <?= htmlspecialchars($_papel) ?>
+    </div>
+    <div style="font-size:12px;color:var(--text);margin-bottom:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="<?= htmlspecialchars($_email) ?>">
+      <?= htmlspecialchars($_email) ?>
+    </div>
+    <a href="logout.php" class="nav-link" style="color:var(--danger);opacity:1;">
+      <span class="icon">🚪</span> Sair
     </a>
   </div>
   
